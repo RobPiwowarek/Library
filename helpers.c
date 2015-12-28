@@ -7,3 +7,7 @@ while (i < size){
 i++;
 }
 }
+
+void clearBuffer(){
+while(getchar()!='\n'){}
+}

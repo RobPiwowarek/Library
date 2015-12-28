@@ -1,5 +1,26 @@
 #include "section.h"
 
+void renameSection(section* sections, int current_elements, char name[WORD_LENGTH_LIMIT]){
+int i = 0;
+char new_name[WORD_LENGTH_LIMIT];
+
+i = findSection(sections, current_elements, name);
+if (i == -1){
+printf("Section not found\n");
+return;
+}
+
+printf("Enter new name:");
+scanf("%s", new_name);
+while(validateSection(sections, new_name, current_elements)){
+printf("\nName already exists. Enter new one:");
+scanf("%s", new_name);
+}
+printf("\n");
+
+strcpy((*(sections+i)).name, new_name);
+}
+
 //decrement CE?
 void removeSection(section* sections, int *current_elements, char name[WORD_LENGTH_LIMIT]){
 int i = 0, j = 0;
@@ -83,7 +104,7 @@ new_section = (section*)malloc(sizeof(section));
 
 printf("Enter section name: ");
 scanf("%s", temp_name);
-while (validateSectionName(sections, temp_name, current_elements)){
+while (validateSection(sections, temp_name, *current_elements)){
 printf("\nSection already exists, please enter a different name:");
 scanf("%s", temp_name);
 }

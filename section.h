@@ -7,6 +7,7 @@ typedef struct Section{
 char name[WORD_LENGTH_LIMIT];
 }section;
 
+void renameSection(section *, int current_elements, char name[WORD_LENGTH_LIMIT]);
 section* createSection(section *, int *current_elements); //test if working correctly after inc
 void removeSection(section*, int *current_elements, char name[WORD_LENGTH_LIMIT]); //test if working correct after dec
 int validateSection(section *, char name[WORD_LENGTH_LIMIT], int current_elements); 
