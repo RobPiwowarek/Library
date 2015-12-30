@@ -8,5 +8,7 @@
 #define WORD_LENGTH_LIMIT 101
 
 void clearCharArray(char *, int);
+
 void clearBuffer();
+
 #endif
