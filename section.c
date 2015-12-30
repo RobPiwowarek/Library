@@ -25,7 +25,7 @@ void removeSection(section** sections, int *current_elements, char name[WORD_LEN
 int i = 0, j = 0;
 section *newCollection;
 
-i = findSection(sections, *current_elements, name);
+i = findSection(*sections, *current_elements, name);
 if (i == -1) { 
 printf("Section not found\n");
 return;
@@ -110,7 +110,7 @@ scanf("%s", temp_name);
 printf("\n");
 strcpy((*new_section).name, temp_name);
 
-reallocateSection(sections, current_elements); //increment CE
+reallocateSection(&sections, current_elements); //increment CE
 *(sections+*current_elements) = *new_section;
 return new_section;
 }

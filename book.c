@@ -8,10 +8,10 @@ scanf("%s", sig);
 j = findBook(books, *current_elements, sig);
 if (j == -1){printf("Book not found\n"); return;}
 
-setTitle(*(books+j));
-setAuthorName(*(books+j));
-setAuthorSurname(*(books+j));
-setYear(*(books+j));
+setTitle((books+j));
+setAuthorName((books+j));
+setAuthorSurname((books+j));
+setYear((books+j));
 //setsection?
 
 printf("\nBook modified\n");
