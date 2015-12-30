@@ -20,7 +20,7 @@ void displayByYear(book*, int current_elements);
 void displayByAuthor(book*, int current_elements);
 void displayByTitle(book*, int current_elements);
 void displayBySection(book*, section*, int current_book_elements, int current_section_elements);
-void modifyBook(book*, int *current_elements);//todo
+void modifyBook(book* books, int *current_elements);//wip
 void createBook(book**, int *current_elements); //test
 void removeBook(book**, int *current_elements, char sig[SIG_LENGTH_LIMIT]);
 void printBook(book);

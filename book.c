@@ -1,5 +1,22 @@
 #include "book.h"
 
+void modifyBook(book* books, int *current_elements){
+char sig[SIG_LENGTH_LIMIT];
+int j = 0;
+printf("Enter signature of the book you want to modify: ");
+scanf("%s", sig);
+j = findBook(books, *current_elements, sig);
+if (j == -1){printf("Book not found\n"); return;}
+
+setTitle(*(books+j));
+setAuthorName(*(books+j));
+setAuthorSurname(*(books+j));
+setYear(*(books+j));
+//setsection?
+
+printf("\nBook modified\n");
+}
+
 void displayBySection(book* books, section* sections, int current_book_elements, int current_section_elements){
 char temp_sect_name[WORD_LENGTH_LIMIT];
 int i = 0, k = 0;
@@ -166,7 +183,6 @@ printf("%s %s %s %s %d %s\n", b1.title, b1.author_name, b1.author_surname, b1.si
 
 //WIP
 void setSection(book *b1, section *sects, int current_section_elements){
-//char choice; //incase of creating new sections?
 char temp_name[WORD_LENGTH_LIMIT];
 int temp_index = 0;
 
@@ -174,18 +190,16 @@ printf("What section does the book belong to?(enter name):");
 scanf("%s", temp_name);
 printf("\n");
 
-//room for improvement, if sect doesnt exist maybe create a new one?
-//maybe change all CE to pointers for easier manipulation?
-if (validateSection(sects, temp_name, current_section_elements)){
+temp_index = findSection(sects, current_section_elements, temp_name);
+
+if (validateSection(sects, temp_name, current_section_elements) || temp_index == -1){
 printf("Section with that name does not exist\n");
 return;
 }
 else {
-//set the section?
-//different function to look for section index?
-temp_index = findSection(sects, current_section_elements, temp_name);
 b1->sect = (sects+temp_index);
 }
+
 }
 
 void setTitle(book *b1){

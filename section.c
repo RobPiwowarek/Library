@@ -21,8 +21,7 @@ printf("\n");
 strcpy((*(sections+i)).name, new_name);
 }
 
-//decrement CE?
-void removeSection(section* sections, int *current_elements, char name[WORD_LENGTH_LIMIT]){
+void removeSection(section** sections, int *current_elements, char name[WORD_LENGTH_LIMIT]){
 int i = 0, j = 0;
 section *newCollection;
 
@@ -38,15 +37,15 @@ if (!newCollection){ printf("removeSection: memory allocation error\n"); exit(4)
 // co jesli j == i == ostatni element?
 while (j < *current_elements-1){
 if (j != i)
-*(newCollection+j) = *(sections+j);
+*(newCollection+j) = *(*sections+j);
 else if(j == i && j != *current_elements){
-*(newCollection+j) = *(sections+j+1);
+*(newCollection+j) = *(*sections+j+1);
 }
 j++;
 }//while
 
-free(sections);
-sections = newCollection;
+free(*sections);
+*sections = newCollection;
 *current_elements -= 1;
 }
 
@@ -74,7 +73,7 @@ i++;
 return 0;
 }
 
-int reallocateSection(section* sections, int *current_elements){
+int reallocateSection(section** sections, int *current_elements){
 section* newCollection;
 int i = 0;
 
@@ -86,12 +85,12 @@ exit(2);
 }
 
 while(i < *current_elements){
-*(newCollection+i) = *(sections+i);
+*(newCollection+i) = *(*sections+i);
 i++;
 }
 
-free(sections);
-sections = newCollection;
+free(*sections);
+*sections = newCollection;
 *current_elements += 1;
 return 0;
 }
