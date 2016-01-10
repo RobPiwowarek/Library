@@ -1,6 +1,7 @@
 #include "fileManager.h"
 #include "helpers.h"
 #include "book.h"
+#include "section.h"
 
 //wip
 void loadBooks(char filename[WORD_LENGTH_LIMIT], book** books, int *current_elements){
@@ -31,7 +32,64 @@ case 0:  strcpy(temp_book->signature, token); break;
 case 1: strcpy(temp_book->title, token); break;
 case 2: strcpy(temp_book->author_name, token); break;
 case 3: strcpy(temp_book->author_surname, token); break;
-case 4: temp_book->year = atoi(token);
+case 4: temp_book->year = atoi(token); break;
+default: printf("Unexpected error\n"); exit(666);
+}//switch
+
+i++;
+printf("token: %s\n", token);
+token = strtok(NULL, s);
+}
+printf("tokenend: %s\n", token);
+insertBook(books, current_elements, temp_book);
+}
+
+if (fclose(file) == EOF) {
+printf("Failed to close file %s\n", filename);
+exit(110);
+}
+
+}
+
+//wip
+void loadDatabase(char filename[WORD_LENGTH_LIMIT], book** books, int *current_book_elements, section** sections, int *current_section_elements){
+FILE * file;
+char readLine[1000];
+char *token;
+const char s[2] = ";";
+file = fopen(filename, 	"r");
+
+if (!file){
+printf("Error: File %s not found or cannot be opened\n", filename);
+return;
+}
+
+//todo:
+//wczytaj linie, rodziel na tokeny, wczytaj do books, 
+while(fgets(line, sizeof line, file) != NULL){
+printf("%s\n", line);
+int inc = 0;
+book* temp_book = (book*)malloc(sizeof(book));
+//test if strtok works
+token = strtok(line, s);
+//wywolaj funkcje dla niego
+//counter/incrementator i odpowiednie przypisania.
+while (token != NULL){
+switch(i){
+case 0:  strcpy(temp_book->signature, token); break;
+case 1: strcpy(temp_book->title, token); break;
+case 2: strcpy(temp_book->author_name, token); break;
+case 3: strcpy(temp_book->author_surname, token); break;
+case 4: temp_book->year = atoi(token); break;
+case 5: temp_book->sect = (section*)malloc(sizeof(section));
+        int temp_index = 0;
+        temp_index = findSection(*sections, *current_section_elements, token);
+        if (temp_index==-1){
+        //create new section
+        }
+        else {
+        temp_book->sect = (*sections+temp_index);
+        }
 default: printf("Unexpected error\n"); exit(666);
 }//switch
 
@@ -80,6 +138,7 @@ printf("Failed to close file %s\n", filename);
 exit(112);
 }
 }
+
 //test
 void saveBooks(char filename[WORD_LENGTH_LIMIT], book** books, int current_elements){
 FILE * file;
@@ -100,5 +159,28 @@ i++;
 if (fclose(file)==EOF){
 printf("Failed to close file %s\n", filename);
 exit(111);
+}
+}
+
+void saveDatabase(char filename[WORD_LENGTH_LIMIT], book** books, int current_elements){
+FILE * file;
+int i = 0;
+file = fopen(filename, "w"); //different open mode?
+
+if (!file){
+printf("Error: failed to fopen file %s\n", filename);
+return;
+}
+
+while (i < current_elements){
+book* temp = (*books+i);
+//sprawdz czy NULLowe sekcje cos tu psuja
+fprintf(file, "%s;%s;%s;%s;%d;%s\n", temp->signature, temp->title, temp->author_name, temp->author_surname, temp->year, temp->sect->name);
+i++;
+}
+
+if (fclose(file)==EOF){
+printf("Failed to close file %s\n", filename);
+exit(115);
 }
 }
