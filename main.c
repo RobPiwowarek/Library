@@ -11,7 +11,7 @@ int main(void) {
 //createBook(&library, &lib_elements);
         createSection(&sections, &sect_elements);
 
-        for (int j = 0; j < sect_elements; j++) printf("[%d] %s\n", j, (sections+j)->name);
+        for (int j = 0; j < sect_elements; j++) printf("[%d] %s\n", j, (sections + j)->name);
 
         printf("DUPA%d\n", 8 + i);
     }

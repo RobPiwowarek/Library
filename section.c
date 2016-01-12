@@ -81,12 +81,12 @@ int reallocateSection(section **sections, int *current_elements) {
     int i = 0;
 
     newCollection = (section *) malloc((*current_elements + 1) * sizeof(section));
-    
+
     if (!newCollection) {
         printf("reallocateSection: memory allocation error\n");
         exit(2);
     }
-   
+
     while (i < *current_elements) {
         *(newCollection + i) = *(*sections + i);
         i++;
@@ -94,9 +94,9 @@ int reallocateSection(section **sections, int *current_elements) {
 
     if (*sections != NULL)
         free(*sections);
-    
+
     *sections = newCollection;
-    
+
     *current_elements += 1;
     return 0;
 }
@@ -122,5 +122,5 @@ void createSection(section **sections, int *current_elements) {
     strcpy(new_section->name, temp_name);
 
     reallocateSection(sections, current_elements); //increment CE
-    *(*sections + (*current_elements-1)) = *new_section;
+    *(*sections + (*current_elements - 1)) = *new_section;
 }
