@@ -78,7 +78,7 @@ void sections(section **sections, int *current_section_elements) {
 
     while (1) {
         printf("Section Managment Menu\n");
-        printf("1) Create section\n2) Rename section\n3) Remove section\n4) Back");
+        printf("1) Create section\n2) Rename section\n3) Remove section\n4) Display sections\n5) Back");
         printf("Choose an option: ");
         scanf("%d", &choice);
         printf("\n");
@@ -88,18 +88,76 @@ void sections(section **sections, int *current_section_elements) {
                 createSection(sections, current_section_elements);
                 break;
             case 2: //ustal nazwe
+                printf("Enter section's name: ");
+                scanf("%s", name);
+                printf("\n");
                 renameSection(*sections, *current_section_elements, name);
                 break;
             case 3: //ustal nazwe
+                printf("Enter section's name: ");
+                scanf("%s", name);
+                printf("\n");
                 removeSection(sections, current_section_elements, name);
                 break;
             case 4:
+                displaySections(*sections, *current_section_elements);
+                break;
+            case 5:
                 return;
             default:
                 printf("Incorrect input\n");
         }//switch
 
     }//while
+}
+
+void fileMngr(book** books, int* current_book_elements, section** sections, int *current_section_elements){
+char line[WORD_LENGTH_LIMIT];
+char cmd[WORD_LENGTH_LIMIT];
+char filename[WORD_LENGTH_LIMIT];
+char temp[WORD_LENGTH_LIMIT];
+int i = 0;
+
+clearCharArray(command, WORD_LENGTH_LIMIT);
+clearCharArray(cmd, WORD_LENGTH_LIMIT);
+clearCharArray(filename, WORD_LENGTH_LIMIT);
+clearCharArray(temp, WORD_LENGTH_LIMIT);
+
+printf("File Manager\n");
+printf("Commands available: save/load filename\n");
+printf("Supported files: katalog.txt pozycje.txt baza.txt\n");
+printf("Enter command: ");
+// prawdopodobnie wpakowuje znak nowej linii
+fgets(command, WORD_LENGTH_LIMIT, stdin);
+printf("\n");
+
+//check if works
+cmd = strtok(line, " ");
+temp = strtok(NULL, " ");
+//remove \n added by fgets
+filename = strndup(temp,strcspn(temp, "\n"));
+
+if (!strcasecmp(cmd, "save")){
+if (!strcasecmp(filename, "katalog.txt"))
+saveSections(filename, sections, *current_section_elements);
+else if(!strcasecmp(filename, "pozycje.txt"))
+saveBooks(filename, books, *current_book_elements);
+else if (!strcasecmp(filename, "baza.txt"))
+saveDatabase(filename, books, *current_book_elements);
+}//if save
+else if (!strcasecmp(cmd, "load")){
+if(!strcasecmp(filename, "katalog.txt"))
+loadSections(filename, sections, current_section_elements);
+if(!strcasecmp(filename, "pozycje.txt"))
+loadBooks(filename, books, current_book_elements);
+if(!strcasecmp(filename, "baza.txt"))
+loadDatabase(filename, books, current_book_elements, sections, current_section_elements);
+}//if load
+else{
+printf("Incorrect command\n");
+printf("Enter save filename or load filename\n");
+}
+
 }
 
 void about() {

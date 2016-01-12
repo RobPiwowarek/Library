@@ -3,10 +3,49 @@
 #include "book.h"
 #include "section.h"
 
+void loadSections(char filename[WORD_LENGTH_LIMIT], section** sections, int *current_elements){
+FILE *file;
+char c;
+char temp_sect_name[WORD_LENGTH_LIMIT];
+int i = 0;
+
+clearCharArray(temp_sect_name,WORD_LENGTH_LIMIT);
+
+file = fopen(filename, "r");
+
+if (!file) {
+printf("Error: file %s not found or cannot be opened\n", filename);
+return;
+}
+
+do {
+c = fgetc(file);
+
+if (c == '\n'){
+if (!validateSection(*sections, temp_sect_name, *current_elements)){
+reallocateSection(sections, current_elements);
+//check if current elements has correct value everywhere (either start @ 0 or 1)
+strcpy((*section+*current_elements)->name, temp_sect_name);
+}
+
+clearCharArray(temp_sect_name, i+1);
+i = 0;
+continue;
+}
+
+temp_sect_name[i++] = c;
+} while(c != '\n' && c != EOF);
+
+    if (fclose(file) == EOF) {
+        printf("Failed to close file %s\n", filename);
+        exit(118);
+    }
+}
+
 //wip
 void loadBooks(char filename[WORD_LENGTH_LIMIT], book **books, int *current_elements) {
     FILE *file;
-    char readLine[1000];
+    char readLine[WORD_LENGTH_LIMIT];
     char *token;
     const char s[2] = ";";
     file = fopen(filename, "r");
@@ -18,6 +57,8 @@ void loadBooks(char filename[WORD_LENGTH_LIMIT], book **books, int *current_elem
 
 //todo:
 //wczytaj linie, rodziel na tokeny, wczytaj do books, 
+//moze nie dzialac ze wzgledu na wpakowywanie \n przez fgets
+//mozna rozwiazac to jak w fileMngr()
     while (fgets(line, sizeof line, file) != NULL) {
         printf("%s\n", line);
         int inc = 0;

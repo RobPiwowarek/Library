@@ -1,5 +1,12 @@
 #include "section.h"
 
+void displaySections(section * sections, int current_elements){
+int i = 0;
+while (i < current_elements){
+printf("%s\n", *(sections+i));
+}//while
+}
+
 void renameSection(section *sections, int current_elements, char name[WORD_LENGTH_LIMIT]) {
     int i = 0;
     char new_name[WORD_LENGTH_LIMIT];
