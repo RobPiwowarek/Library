@@ -1,6 +1,5 @@
 #include "helpers.h"
 #include "book.h"
-#include "section.h"
 
 int main(void) {
     book *library = NULL;

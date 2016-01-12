@@ -7,8 +7,8 @@
 
 void menu(book **, int *, section **, int *);
 
-void fileMngr(book **, int*, section **, int*); //file manager options
-void books(book **, int*, section **, int*);
+void fileMngr(book **, int *, section **, int *); //file manager options
+void books(book **, int *, section **, int *);
 
 void sections(section **, int *);
 

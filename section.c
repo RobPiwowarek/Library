@@ -1,10 +1,10 @@
 #include "section.h"
 
-void displaySections(section * sections, int current_elements){
-int i = 0;
-while (i < current_elements){
-printf("%s\n", *(sections+i));
-}//while
+void displaySections(section *sections, int current_elements) {
+    int i = 0;
+    while (i < current_elements) {
+        printf("%s\n", *(sections + i));
+    }//while
 }
 
 void renameSection(section *sections, int current_elements, char name[WORD_LENGTH_LIMIT]) {
@@ -44,7 +44,6 @@ void removeSection(section **sections, int *current_elements, char name[WORD_LEN
         exit(4);
     }
 
-// co jesli j == i == ostatni element?
     while (j < *current_elements - 1) {
         if (j != i)
             *(newCollection + j) = *(*sections + j);
