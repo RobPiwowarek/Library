@@ -24,10 +24,10 @@ void displayByTitle(book *, int current_elements);
 
 void displayBySection(book *, section *, int current_book_elements, int current_section_elements);
 
-void modifyBook(book *books, int *current_elements);
+void modifyBook(book *books, int *current_elements, section **sects, int *current_section_elements);
 
 //wip
-void createBook(book **, int *current_elements); //test
+void createBook(book **, int *current_elements, section **sects, int *current_section_elements); //test
 void removeBook(book **, int *current_elements, char sig[SIG_LENGTH_LIMIT]);
 
 void printBook(book);

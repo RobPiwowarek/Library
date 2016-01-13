@@ -113,10 +113,12 @@ void loadBooks(char filename[WORD_LENGTH_LIMIT], book **books, int *current_elem
 void loadDatabase(char filename[WORD_LENGTH_LIMIT], book **books, section **sections, int *current_book_elements,
                   int *current_section_elements) {
     FILE *file;
-    char readLine[1000];
+    char readLine[WORD_LENGTH_LIMIT];
     char *token;
     const char s[2] = ";";
     file = fopen(filename, "r");
+
+    clearCharArray(readLine, WORD_LENGTH_LIMIT);
 
     if (!file) {
         printf("Error: File %s not found or cannot be opened\n", filename);
@@ -125,13 +127,12 @@ void loadDatabase(char filename[WORD_LENGTH_LIMIT], book **books, section **sect
 
 //jak dziala funkcja wyzej to zastosuje to samo rozwiazanie.
     while (fgets(readLine, sizeof readLine, file) != NULL) {
-        printf("%s\n", readLine);
         int inc = 0;
         book *temp_book = (book *) malloc(sizeof(book));
-//test if strtok works
+
+        readLine[strcspn(readLine, "\n")] = '\0';
+
         token = strtok(readLine, s);
-//wywolaj funkcje dla niego
-//counter/incrementator i odpowiednie przypisania.
         while (token != NULL) {
             switch (inc) {
                 case 0:
@@ -160,15 +161,13 @@ void loadDatabase(char filename[WORD_LENGTH_LIMIT], book **books, section **sect
                         temp_book->sect = (*sections + temp_index);
                     }
                 default:
-                    printf("Unexpected error\n");
-                    exit(666);
+                    break;
             }//switch
 
             inc++;
             printf("token: %s\n", token);
             token = strtok(NULL, s);
         }
-        printf("tokenend: %s\n", token);
         insertBook(books, current_book_elements, temp_book);
     }
 

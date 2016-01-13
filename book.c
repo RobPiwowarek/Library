@@ -1,10 +1,11 @@
 #include "book.h"
 
-void modifyBook(book *books, int *current_elements) {
+void modifyBook(book *books, int *current_elements, section **sects, int *current_section_elements) {
     char sig[SIG_LENGTH_LIMIT];
     int j = 0;
     printf("Enter signature of the book you want to modify: ");
     scanf("%s", sig);
+    clearBuffer();
     j = findBook(books, *current_elements, sig);
     if (j == -1) {
         printf("Book not found\n");
@@ -15,6 +16,11 @@ void modifyBook(book *books, int *current_elements) {
     setAuthorName((books + j));
     setAuthorSurname((books + j));
     setYear((books + j));
+    if (*current_section_elements == 0)
+        printf("There are currently no sections to set");
+    else
+        setSection((books + j), *sects, *current_section_elements);
+
 
     printf("\nBook modified\n");
 }
@@ -24,7 +30,8 @@ void displayBySection(book *books, section *sections, int current_book_elements,
     int i = 0, k = 0;
 
     printf("Enter section name:");
-    scanf("%s", temp_sect_name);
+    fgets(temp_sect_name, WORD_LENGTH_LIMIT, stdin);
+    temp_sect_name[strcspn(temp_sect_name, "\n")] = '\0';
     printf("\n");
 
     k = findSection(sections, current_section_elements, temp_sect_name);
@@ -44,7 +51,8 @@ void displayByTitle(book *books, int current_elements) {
     int i = 0;
 
     printf("Enter title:");
-    scanf("%s", temp_title);
+    fgets(temp_title, WORD_LENGTH_LIMIT, stdin);
+    temp_title[strcspn(temp_title, "\n")] = '\0';
     printf("\n");
 
     while (i < current_elements) {
@@ -60,8 +68,10 @@ void displayByAuthor(book *books, int current_elements) {
 
     printf("Enter author name:");
     scanf("%s", temp_name);
+    clearBuffer();
     printf("\nEnter author surname");
     scanf("%s", temp_surname);
+    clearBuffer();
     printf("\n");
 
     while (i < current_elements) {
@@ -82,6 +92,7 @@ void displayByYear(book *books, int current_elements) {
         printf("\nIncorrect input data\n");
         return;
     }
+    clearBuffer();
     while (temp_year > CURRENT_YEAR) {
         printf("\nNo books could have been published in %d because it is still %d\n", temp_year, CURRENT_YEAR);
         printf("Enter new year:");
@@ -89,7 +100,9 @@ void displayByYear(book *books, int current_elements) {
             printf("\nIncorrect input data\n");
             return;
         }
+        clearBuffer();
         scanf("%d", &temp_year);
+        clearBuffer();
     }
 
     while (i < current_elements) {
@@ -138,7 +151,7 @@ int findBook(book *books, int current_elements, char sig[SIG_LENGTH_LIMIT]) {
 }
 
 //maybe set section here?
-void createBook(book **books, int *current_elements) {
+void createBook(book **books, int *current_elements, section **sects, int *current_section_elements) {
     book *newBook;
 
     newBook = (book *) malloc(sizeof(book));
@@ -153,6 +166,13 @@ void createBook(book **books, int *current_elements) {
     setAuthorSurname(newBook);
     setYear(newBook);
     setSignature(newBook, *books, *current_elements);
+
+    if (*current_section_elements == 0) {
+        printf("There are currently no sections to set\n");
+    }
+    else {
+        setSection(newBook, *sects, *current_section_elements);
+    }
 
     reallocateBooks(books, current_elements);//incremenet CE
 
@@ -194,13 +214,17 @@ void setSection(book *b1, section *sects, int current_section_elements) {
     char temp_name[WORD_LENGTH_LIMIT];
     int temp_index = 0;
 
+    clearCharArray(temp_name, WORD_LENGTH_LIMIT);
+
     printf("What section does the book belong to?(enter name):");
-    scanf("%s", temp_name);
+    fgets(temp_name, WORD_LENGTH_LIMIT, stdin);
+    temp_name[strcspn(temp_name, "\n")] = '\0';
+    printf("temp_name: %s\n", temp_name);
     printf("\n");
 
     temp_index = findSection(sects, current_section_elements, temp_name);
 
-    if (validateSection(sects, temp_name, current_section_elements) || temp_index == -1) {
+    if (temp_index == -1) {
         printf("Section with that name does not exist\n");
         return;
     }
@@ -212,19 +236,22 @@ void setSection(book *b1, section *sects, int current_section_elements) {
 
 void setTitle(book *b1) {
     printf("\nEnter book title: ");
-    scanf("%s", b1->title);
+    fgets(b1->title, WORD_LENGTH_LIMIT, stdin);
+    b1->title[strcspn(b1->title, "\n")] = '\0';
     printf("\n");
 }
 
 void setAuthorName(book *b1) {
     printf("\nEnter author name: ");
     scanf("%s", b1->author_name);
+    clearBuffer();
     printf("\n");
 }
 
 void setAuthorSurname(book *b1) {
     printf("\nEnter author surname: ");
     scanf("%s", b1->author_surname);
+    clearBuffer();
     printf("\n");
 }
 
@@ -238,10 +265,12 @@ void setSignature(book *b1, book *books, int current_elements) {
     char temp_sig[SIG_LENGTH_LIMIT];
     printf("\nEnter signature(format AAAA0000):");
     scanf("%s", temp_sig);
+    clearBuffer();
     while (validateSignature(temp_sig) || isSignatureUnique(temp_sig, books, current_elements)) {
         printf("\nSignature invalid(correct format AAAA0000) or entered signature already exists in the database\n");
         printf("Please reenter signature: ");
         scanf("%s", temp_sig);
+        clearBuffer();
     }
     printf("\n");
 
@@ -251,7 +280,7 @@ void setSignature(book *b1, book *books, int current_elements) {
 int isSignatureUnique(char sig[SIG_LENGTH_LIMIT], book *books, int current_elements) {
     int i = 0;
 
-    printf("%s\n", sig);
+    //printf("%s\n", sig);
 
     while (i < current_elements) {
         if (!strcmp(sig, (*(books + i)).signature)) return 1;
@@ -295,6 +324,7 @@ int validateYear(book *b1) {
         }
     }
 
+    clearBuffer();
     b1->year = temp_year;
     return 0;
 }

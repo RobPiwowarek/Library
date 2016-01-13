@@ -4,6 +4,7 @@ void displaySections(section *sections, int current_elements) {
     int i = 0;
     while (i < current_elements) {
         printf("%s\n", (sections + i)->name);
+        i++;
     }//while
 }
 
@@ -18,10 +19,14 @@ void renameSection(section *sections, int current_elements, char name[WORD_LENGT
     }
 
     printf("Enter new name:");
-    scanf("%s", new_name);
+    fgets(new_name, WORD_LENGTH_LIMIT, stdin);
+    new_name[strcspn(new_name, "\n")] = '\0';
+
     while (validateSection(sections, new_name, current_elements)) {
         printf("\nName already exists. Enter new one:");
-        scanf("%s", new_name);
+        fgets(new_name, WORD_LENGTH_LIMIT, stdin);
+        new_name[strcspn(new_name, "\n")] = '\0';
+
     }
     printf("\n");
 
@@ -64,6 +69,7 @@ int findSection(section *sections, int current_elements, char name[WORD_LENGTH_L
     int i = 0;
 
     while (i < current_elements) {
+        printf("porownanie: %s z %s \n", (*(sections + i)).name, name);
         if (!strcmp((*(sections + i)).name, name)) return i;
         i++;
     }
@@ -113,16 +119,22 @@ void createSection(section **sections, int *current_elements) {
     section *new_section;
     new_section = (section *) malloc(sizeof(section));
 
+    clearCharArray(temp_name, WORD_LENGTH_LIMIT);
+
     if (!new_section) {
         printf("createSection: memory allocation error\n");
         exit(7);
     }
 
     printf("Enter section name: ");
-    scanf("%s", temp_name);
+    fgets(temp_name, WORD_LENGTH_LIMIT, stdin);
+    temp_name[strcspn(temp_name, "\n")] = '\0';
+    printf("create: %s\n", temp_name);
+
     while (validateSection(*sections, temp_name, *current_elements)) {
         printf("\nSection already exists, please enter a different name:");
-        scanf("%s", temp_name);
+        fgets(temp_name, WORD_LENGTH_LIMIT, stdin);
+        temp_name[strcspn(temp_name, "\n")] = '\0';
     }
     printf("\n");
     strcpy(new_section->name, temp_name);

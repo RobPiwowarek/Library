@@ -12,6 +12,7 @@ void menu(book **liBooks, int *current_book_elements, section **sects, int *curr
     printf("I choose: ");
 
     clr = scanf("%d", &choice);
+    clearBuffer();
     printf("\n");
 
     switch (choice) {
@@ -27,7 +28,7 @@ void menu(book **liBooks, int *current_book_elements, section **sects, int *curr
         default:
             printf("Error: menu -> something went wrong\n");
             // failed to scanf == chars left in buffer
-            if (clr == 0) clearBuffer();
+            //if (clr == 0) clearBuffer();
     }
 }
 
@@ -39,16 +40,17 @@ void books(book **libBooks, int *current_book_elements, section **sects, int *cu
 
     while (1) {
         printf("Book Managment Menu\n");
-        printf("1) Create book\n2) Modify book\n3) Remove book\n4) Display\n5)Back\n");
+        printf("1) Create book\n2) Modify book\n3) Remove book\n4) Display\n5) Back\n");
         printf("Choose an option: ");
         scanf("%d", &choice);
+        clearBuffer();
         printf("\n");
         switch (choice) {
             case 1:
-                createBook(libBooks, current_book_elements);
+                createBook(libBooks, current_book_elements, sects, current_section_elements);
                 break;
             case 2:
-                modifyBook(*libBooks, current_book_elements);
+                modifyBook(*libBooks, current_book_elements, sects, current_section_elements);
                 break;
             case 3:
                 if (*current_book_elements == 0) {
@@ -58,11 +60,13 @@ void books(book **libBooks, int *current_book_elements, section **sects, int *cu
                 clearCharArray(sig, SIG_LENGTH_LIMIT);
                 printf("Enter signature of the book you want to remove\n");
                 scanf("%s", sig);
+                clearBuffer();
                 while (validateSignature(sig)) {
                     printf("Incorrect signature\n");
                     printf("Please reenter\n");
                     clearCharArray(sig, SIG_LENGTH_LIMIT);
                     scanf("%s", sig);
+                    clearBuffer();
                 }
                 removeBook(libBooks, current_book_elements, sig);
                 break;
@@ -83,11 +87,14 @@ void sections(section **sects, int *current_section_elements) {
     int clr = 0;
     char name[WORD_LENGTH_LIMIT];
 
+    clearCharArray(name, WORD_LENGTH_LIMIT);
+
     while (1) {
         printf("Section Managment Menu\n");
-        printf("1) Create section\n2) Rename section\n3) Remove section\n4) Display sections\n5) Back");
+        printf("1) Create section\n2) Rename section\n3) Remove section\n4) Display sections\n5) Back\n");
         printf("Choose an option: ");
         clr = scanf("%d", &choice);
+        clearBuffer();
         printf("\n");
 
         switch (choice) {
@@ -96,13 +103,17 @@ void sections(section **sects, int *current_section_elements) {
                 break;
             case 2:
                 printf("Enter section's name: ");
-                scanf("%s", name);
+
+                fgets(name, WORD_LENGTH_LIMIT, stdin);
+                name[strcspn(name, "\n")] = '\0';
                 printf("\n");
                 renameSection(*sects, *current_section_elements, name);
                 break;
             case 3:
                 printf("Enter section's name: ");
-                scanf("%s", name);
+
+                fgets(name, WORD_LENGTH_LIMIT, stdin);
+                name[strcspn(name, "\n")] = '\0';
                 printf("\n");
                 removeSection(sects, current_section_elements, name);
                 break;
@@ -114,7 +125,7 @@ void sections(section **sects, int *current_section_elements) {
             default:
                 printf("Incorrect input\n");
                 //failed scanf == chars left in buffer
-                if (clr == 0) clearBuffer();
+                //if (clr == 0) clearBuffer();
         }//switch
 
     }//while
@@ -175,11 +186,11 @@ void bDisplayMenu(book **libBooks, int current_elements, section **sects, int cu
     printf("Choose an option: ");
     do {
         a = scanf("%d", &choice);
+        clearBuffer();
         printf("\n");
 
         if (a == 0 || choice < 1 || choice > 5) {
             printf("Wrong input. Please re-enter:");
-            if (!a) clearBuffer();
         }
 
     } while (a == 0 || choice < 1 || choice > 5);
