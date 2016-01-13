@@ -13,6 +13,6 @@ void books(book **, int *, section **, int *);
 void sections(section **, int *);
 
 void about(); //author etc.
-void bDisplayMenu(book **, int *);
+void bDisplayMenu(book **, int, section **, int);
 
 #endif

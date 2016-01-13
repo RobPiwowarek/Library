@@ -1,6 +1,7 @@
 #include "menu.h"
+#include "fileManager.h"
 
-void menu(book **books, int *current_book_elements, section **sections, int *current_section_elements) {
+void menu(book **liBooks, int *current_book_elements, section **sects, int *current_section_elements) {
     int choice = 0;
     int clr = 0;
 
@@ -15,13 +16,13 @@ void menu(book **books, int *current_book_elements, section **sections, int *cur
 
     switch (choice) {
         case 1:
-            books(books, current_book_elements, sections, current_section_elements);
+            books(liBooks, current_book_elements, sects, current_section_elements);
             break;
         case 2:
-            sections(sections, current_section_elements);
+            sections(sects, current_section_elements);
             break;
         case 3:
-            fileMngr();
+            fileMngr(liBooks, current_book_elements, sects, current_section_elements);
             break;
         default:
             printf("Error: menu -> something went wrong\n");
@@ -30,8 +31,12 @@ void menu(book **books, int *current_book_elements, section **sections, int *cur
     }
 }
 
-void books(book **books, int *current_book_elements, section **sections, int *current_section_elements) {
+void books(book **libBooks, int *current_book_elements, section **sects, int *current_section_elements) {
     int choice = 0;
+    char sig[SIG_LENGTH_LIMIT];
+
+    clearCharArray(sig, SIG_LENGTH_LIMIT);
+
     while (1) {
         printf("Book Managment Menu\n");
         printf("1) Create book\n2) Modify book\n3) Remove book\n4) Display\n5)Back\n");
@@ -40,19 +45,18 @@ void books(book **books, int *current_book_elements, section **sections, int *cu
         printf("\n");
         switch (choice) {
             case 1:
-                createBook(books, current_book_elements);
+                createBook(libBooks, current_book_elements);
                 break;
             case 2:
-                modifyBook(*books, current_book_elements);
+                modifyBook(*libBooks, current_book_elements);
                 break;
             case 3:
-                char sig[SIG_LENGTH_LIMIT];
                 if (*current_book_elements == 0) {
                     printf("There are no books to remove\n");
                     break;
                 }
                 clearCharArray(sig, SIG_LENGTH_LIMIT);
-                printf("Enter signature of the book you want to remove\n")
+                printf("Enter signature of the book you want to remove\n");
                 scanf("%s", sig);
                 while (validateSignature(sig)) {
                     printf("Incorrect signature\n");
@@ -60,10 +64,10 @@ void books(book **books, int *current_book_elements, section **sections, int *cu
                     clearCharArray(sig, SIG_LENGTH_LIMIT);
                     scanf("%s", sig);
                 }
-                removeBook(books, current_book_elements, sig);
+                removeBook(libBooks, current_book_elements, sig);
                 break;
             case 4:
-                bDisplayMenu(books, current_book_elements);
+                bDisplayMenu(libBooks, *current_book_elements, sects, *current_section_elements);
                 break;
             case 5:
                 return;
@@ -74,7 +78,7 @@ void books(book **books, int *current_book_elements, section **sections, int *cu
     }//while
 }
 
-void sections(section **sections, int *current_section_elements) {
+void sections(section **sects, int *current_section_elements) {
     int choice = 0;
     int clr = 0;
     char name[WORD_LENGTH_LIMIT];
@@ -88,22 +92,22 @@ void sections(section **sections, int *current_section_elements) {
 
         switch (choice) {
             case 1:
-                createSection(sections, current_section_elements);
+                createSection(sects, current_section_elements);
                 break;
             case 2:
                 printf("Enter section's name: ");
                 scanf("%s", name);
                 printf("\n");
-                renameSection(*sections, *current_section_elements, name);
+                renameSection(*sects, *current_section_elements, name);
                 break;
             case 3:
                 printf("Enter section's name: ");
                 scanf("%s", name);
                 printf("\n");
-                removeSection(sections, current_section_elements, name);
+                removeSection(sects, current_section_elements, name);
                 break;
             case 4:
-                displaySections(*sections, *current_section_elements);
+                displaySections(*sects, *current_section_elements);
                 break;
             case 5:
                 return;
@@ -116,14 +120,13 @@ void sections(section **sections, int *current_section_elements) {
     }//while
 }
 
-void fileMngr(book **books, int *current_book_elements, section **sections, int *current_section_elements) {
+void fileMngr(book **liBooks, int *current_book_elements, section **sects, int *current_section_elements) {
     char line[WORD_LENGTH_LIMIT];
     char cmd[WORD_LENGTH_LIMIT];
     char filename[WORD_LENGTH_LIMIT];
     char temp[WORD_LENGTH_LIMIT];
-    int i = 0;
 
-    clearCharArray(command, WORD_LENGTH_LIMIT);
+    clearCharArray(line, WORD_LENGTH_LIMIT);
     clearCharArray(cmd, WORD_LENGTH_LIMIT);
     clearCharArray(filename, WORD_LENGTH_LIMIT);
     clearCharArray(temp, WORD_LENGTH_LIMIT);
@@ -132,35 +135,72 @@ void fileMngr(book **books, int *current_book_elements, section **sections, int 
     printf("Commands available: save/load filename\n");
     printf("Supported files: katalog.txt pozycje.txt baza.txt\n");
     printf("Enter command: ");
-    fgets(command, WORD_LENGTH_LIMIT, stdin);
+    fgets(line, WORD_LENGTH_LIMIT, stdin);
     printf("\n");
 
 //check if works
-    cmd = strtok(line, " ");
-    temp = strtok(NULL, " ");
+    strcpy(cmd, strtok(line, " "));
+    strcpy(temp, strtok(NULL, " "));
     //remove \n added by fgets
-    filename = strndup(temp, strcspn(temp, "\n"));
+    strcpy(filename, strndup(temp, strcspn(temp, "\n")));
 
     if (!strcasecmp(cmd, "save")) {
         if (!strcasecmp(filename, "katalog.txt"))
-            saveSections(filename, sections, *current_section_elements);
+            saveSections(filename, sects, *current_section_elements);
         else if (!strcasecmp(filename, "pozycje.txt"))
-            saveBooks(filename, books, *current_book_elements);
+            saveBooks(filename, liBooks, *current_book_elements);
         else if (!strcasecmp(filename, "baza.txt"))
-            saveDatabase(filename, books, *current_book_elements);
+            saveDatabase(filename, liBooks, *current_book_elements);
     }//if save
     else if (!strcasecmp(cmd, "load")) {
         if (!strcasecmp(filename, "katalog.txt"))
-            loadSections(filename, sections, current_section_elements);
+            loadSections(filename, sects, current_section_elements);
         if (!strcasecmp(filename, "pozycje.txt"))
-            loadBooks(filename, books, current_book_elements);
+            loadBooks(filename, liBooks, current_book_elements);
         if (!strcasecmp(filename, "baza.txt"))
-            loadDatabase(filename, books, current_book_elements, sections, current_section_elements);
+            loadDatabase(filename, liBooks, sects, current_book_elements, current_section_elements);
     }//if load
     else {
         printf("Incorrect command\n");
         printf("Enter save filename or load filename\n");
     }
+
+}
+
+void bDisplayMenu(book **libBooks, int current_elements, section **sects, int current_section_elements) {
+    int choice = 0;
+    int a = 0;
+    printf("Display Menu\n");
+    printf("1) By title\n2) By author\n3) By year\n4) By section\n5) Back\n");
+    printf("Choose an option: ");
+    do {
+        a = scanf("%d", &choice);
+        printf("\n");
+
+        if (a == 0 || choice < 1 || choice > 5) {
+            printf("Wrong input. Please re-enter:");
+            if (!a) clearBuffer();
+        }
+
+    } while (a == 0 || choice < 1 || choice > 5);
+
+    switch (choice) {
+        case 1:
+            displayByTitle(*libBooks, current_elements);
+            break;
+        case 2:
+            displayByAuthor(*libBooks, current_elements);
+            break;
+        case 3:
+            displayByYear(*libBooks, current_elements);
+            break;
+        case 4:
+            displayBySection(*libBooks, *sects, current_elements, current_section_elements);
+            break;
+        case 5:
+            return;
+    }
+
 
 }
 

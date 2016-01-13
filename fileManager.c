@@ -62,7 +62,8 @@ void loadBooks(char filename[WORD_LENGTH_LIMIT], book **books, int *current_elem
 //moze nie dzialac ze wzgledu na wpakowywanie \n przez fgets
 //mozna rozwiazac to jak w fileMngr()
     while (fgets(readLine, sizeof readLine, file) != NULL) {
-        printf("%s\n", readLine);
+        //printf("%s\n", readLine);
+        readLine[strcspn(readLine, "\n")] = '\0';
         int inc = 0;
         book *temp_book = (book *) malloc(sizeof(book));
 
@@ -185,7 +186,7 @@ void insertBook(book **books, int *current_elements, book *loadedBook) {
     }
 
     reallocateBooks(books, current_elements);
-    (*books + *current_elements) = loadedBook;
+    *(*books + *current_elements) = *loadedBook;
 }
 
 //test

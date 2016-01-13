@@ -19,4 +19,5 @@ void saveBooks(char filename[WORD_LENGTH_LIMIT], book **, int current_elements);
 void saveDatabase(char filename[WORD_LENGTH_LIMIT], book **, int current_elements);
 
 void insertBook(book **books, int *current_elements, book *loadedBook);
+
 #endif
