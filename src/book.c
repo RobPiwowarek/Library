@@ -181,7 +181,7 @@ void createBook(book **books, int *current_elements, section **sects, int *curre
         setSection(newBook, *sects, *current_section_elements);
     }
 
-    reallocateBooks(books, current_elements);//incremenet CE
+    reallocateBooks(books, current_elements);//increment CE
 
     *(*books + ((*current_elements) - 1)) = *(newBook);
 

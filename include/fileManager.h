@@ -7,8 +7,9 @@
 
 //save and load from 3 files only katalog.txt, pozycje.txt, baza.txt
 void loadDatabase(char filename[WORD_LENGTH_LIMIT], book **, section **, int *current_book_elements,
-                  int *current_section_elements); //todo
-void loadSections(char filename[WORD_LENGTH_LIMIT], section **, int *current_elements); //todo
+                  int *current_section_elements);
+
+void loadSections(char filename[WORD_LENGTH_LIMIT], section **, int *current_elements);
 
 void loadBooks(char filename[WORD_LENGTH_LIMIT], book **, int *current_elements);
 
