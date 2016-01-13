@@ -22,10 +22,11 @@ void loadSections(char filename[WORD_LENGTH_LIMIT], section **sections, int *cur
         c = fgetc(file);
 
         if (c == '\n') {
+            printf("section input: %s \n", temp_sect_name);
             if (!validateSection(*sections, temp_sect_name, *current_elements)) {
                 reallocateSection(sections, current_elements);
-//check if current elements has correct value everywhere (either start @ 0 or 1)
-                strcpy((*sections + *current_elements)->name, temp_sect_name);
+                strcpy((*(*sections + *current_elements - 1)).name, temp_sect_name);
+                printf("Current elements: %d", *current_elements);
             }
 
             clearCharArray(temp_sect_name, i + 1);
@@ -34,7 +35,7 @@ void loadSections(char filename[WORD_LENGTH_LIMIT], section **sections, int *cur
         }
 
         temp_sect_name[i++] = c;
-    } while (c != '\n' && c != EOF);
+    } while (c != EOF);
 
     if (fclose(file) == EOF) {
         printf("Failed to close file %s\n", filename);
@@ -42,33 +43,26 @@ void loadSections(char filename[WORD_LENGTH_LIMIT], section **sections, int *cur
     }
 }
 
-//wip
 void loadBooks(char filename[WORD_LENGTH_LIMIT], book **books, int *current_elements) {
     FILE *file;
     char readLine[WORD_LENGTH_LIMIT];
     char *token;
     const char s[2] = ";";
-    char temp[WORD_LENGTH_LIMIT];
     file = fopen(filename, "r");
 
     clearCharArray(readLine, WORD_LENGTH_LIMIT);
-    clearCharArray(temp, WORD_LENGTH_LIMIT);
 
     if (!file) {
         printf("Error: File %s not found or cannot be opened\n", filename);
         return;
     }
-
-//moze nie dzialac ze wzgledu na wpakowywanie \n przez fgets
-//mozna rozwiazac to jak w fileMngr()
     while (fgets(readLine, sizeof readLine, file) != NULL) {
-        //printf("%s\n", readLine);
-        readLine[strcspn(readLine, "\n")] = '\0';
         int inc = 0;
         book *temp_book = (book *) malloc(sizeof(book));
 
-        token = strtok(readLine, s);
+        readLine[strcspn(readLine, "\n")] = '\0';
 
+        token = strtok(readLine, s);
         while (token != NULL) {
             switch (inc) {
                 case 0:
@@ -87,20 +81,17 @@ void loadBooks(char filename[WORD_LENGTH_LIMIT], book **books, int *current_elem
                     temp_book->year = atoi(token);
                     break;
                 default:
-                    printf("Unexpected error\n");
-                    exit(666);
+                    break;
             }//switch
 
             inc++;
             printf("token: %s\n", token);
-            strcpy(temp, strtok(NULL, s));
-            strcpy(token, strndup(temp, strcspn(temp, "\n")));
-            clearCharArray(temp, WORD_LENGTH_LIMIT);
-            clearCharArray(token, WORD_LENGTH_LIMIT);
+            token = strtok(NULL, s);
         }
-        printf("tokenend: %s\n", token);
         insertBook(books, current_elements, temp_book);
     }
+
+    printf("Loading sequence complete\n");
 
     if (fclose(file) == EOF) {
         printf("Failed to close file %s\n", filename);
@@ -152,10 +143,16 @@ void loadDatabase(char filename[WORD_LENGTH_LIMIT], book **books, section **sect
                     break;
                 case 5:
                     temp_book->sect = (section *) malloc(sizeof(section));
+                    if (!temp_book->sect) {
+                        printf("loadDatabase: Memory allocation error\n");
+                        exit(119);
+                    }
+
                     int temp_index = 0;
                     temp_index = findSection(*sections, *current_section_elements, token);
                     if (temp_index == -1) {
-                        //create new section
+                        reallocateSection(sections, current_section_elements);
+                        strcpy(((*sections + *current_section_elements - 1))->name, token);
                     }
                     else {
                         temp_book->sect = (*sections + temp_index);
@@ -171,6 +168,8 @@ void loadDatabase(char filename[WORD_LENGTH_LIMIT], book **books, section **sect
         insertBook(books, current_book_elements, temp_book);
     }
 
+    printf("Loading sequence complete\n");
+
     if (fclose(file) == EOF) {
         printf("Failed to close file %s\n", filename);
         exit(110);
@@ -185,7 +184,7 @@ void insertBook(book **books, int *current_elements, book *loadedBook) {
     }
 
     reallocateBooks(books, current_elements);
-    *(*books + *current_elements) = *loadedBook;
+    *(*books + *current_elements - 1) = *loadedBook;
 }
 
 //test
