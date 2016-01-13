@@ -48,26 +48,26 @@ void loadBooks(char filename[WORD_LENGTH_LIMIT], book **books, int *current_elem
     char readLine[WORD_LENGTH_LIMIT];
     char *token;
     const char s[2] = ";";
+    char temp[WORD_LENGTH_LIMIT];
     file = fopen(filename, "r");
-
+    
+    clearCharArray(readline, WORD_LENGTH_LIMIT);
+    clearCharArray(temp, WORD_LENGTH_LIMIT);
+    
     if (!file) {
         printf("Error: File %s not found or cannot be opened\n", filename);
         return;
     }
-
-//todo:
-//wczytaj linie, rodziel na tokeny, wczytaj do books, 
+ 
 //moze nie dzialac ze wzgledu na wpakowywanie \n przez fgets
 //mozna rozwiazac to jak w fileMngr()
     while (fgets(line, sizeof line, file) != NULL) {
         printf("%s\n", line);
         int inc = 0;
         book *temp_book = (book *) malloc(sizeof(book));
-//test if strtok works
-        //filename = strndup(temp, strcspn(temp, "\n"));
+
         token = strtok(line, s);
-//wywolaj funkcje dla niego
-//counter/incrementator i odpowiednie przypisania.
+
         while (token != NULL) {
             switch (i) {
                 case 0:
@@ -92,7 +92,10 @@ void loadBooks(char filename[WORD_LENGTH_LIMIT], book **books, int *current_elem
 
             i++;
             printf("token: %s\n", token);
-            token = strtok(NULL, s);
+            temp = strtok(NULL, s);
+            token = strndup(temp, strcspn(temp, "\n"));
+            clearCharArray(temp, WORD_LENGTH_LIMIT);
+            //clearCharArray(token, WORD_LENGTH_LIMIT); strlen token?
         }
         printf("tokenend: %s\n", token);
         insertBook(books, current_elements, temp_book);
@@ -119,8 +122,7 @@ void loadDatabase(char filename[WORD_LENGTH_LIMIT], book **books, int *current_b
         return;
     }
 
-//todo:
-//wczytaj linie, rodziel na tokeny, wczytaj do books, 
+//jak dziala funkcja wyzej to zastosuje to samo rozwiazanie.
     while (fgets(line, sizeof line, file) != NULL) {
         printf("%s\n", line);
         int inc = 0;
