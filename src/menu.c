@@ -185,11 +185,11 @@ void bDisplayMenu(book **libBooks, int current_elements, section **sects, int cu
         clearBuffer();
         printf("\n");
 
-        if (a == 0 || choice < 1 || choice > 5) {
+        if (a == 0 || choice < 1 || choice > 6) {
             printf("Wrong input. Please re-enter:");
         }
 
-    } while (a == 0 || choice < 1 || choice > 5);
+    } while (a == 0 || choice < 1 || choice > 6);
 
     switch (choice) {
         case 1:
