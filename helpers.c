@@ -1,4 +1,4 @@
-#include "helpers.h"
+#include"../include/helpers.h"
 
 void clearCharArray(char *array, int size) {
     int i = 0;

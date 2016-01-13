@@ -1,7 +1,7 @@
-#include "fileManager.h"
-#include "helpers.h"
-#include "book.h"
-#include "section.h"
+#include"../include/fileManager.h"
+#include"../include/helpers.h"
+#include"../include/book.h"
+#include"../include/section.h"
 
 void loadSections(char filename[WORD_LENGTH_LIMIT], section **sections, int *current_elements) {
     FILE *file;

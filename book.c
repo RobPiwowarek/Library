@@ -1,4 +1,4 @@
-#include "book.h"
+#include"../include/book.h"
 
 void modifyBook(book *books, int *current_elements, section **sects, int *current_section_elements) {
     char sig[SIG_LENGTH_LIMIT];

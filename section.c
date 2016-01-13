@@ -1,4 +1,4 @@
-#include "section.h"
+#include"../include/section.h"
 
 void displaySections(section *sections, int current_elements) {
     int i = 0;

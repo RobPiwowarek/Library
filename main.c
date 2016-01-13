@@ -1,6 +1,6 @@
-#include "helpers.h"
-#include "book.h"
-#include "menu.h"
+#include"../include/helpers.h"
+#include"../include/book.h"
+#include"../include/menu.h"
 
 int main(void) {
     book *library = NULL;

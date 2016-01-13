@@ -1,5 +1,5 @@
-#include "menu.h"
-#include "fileManager.h"
+#include"../include/menu.h"
+#include"../include/fileManager.h"
 
 void menu(book **liBooks, int *current_book_elements, section **sects, int *current_section_elements) {
     int choice = 0;
