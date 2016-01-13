@@ -90,13 +90,13 @@ void sections(section **sections, int *current_section_elements) {
             case 1:
                 createSection(sections, current_section_elements);
                 break;
-            case 2: 
+            case 2:
                 printf("Enter section's name: ");
                 scanf("%s", name);
                 printf("\n");
                 renameSection(*sections, *current_section_elements, name);
                 break;
-            case 3: 
+            case 3:
                 printf("Enter section's name: ");
                 scanf("%s", name);
                 printf("\n");

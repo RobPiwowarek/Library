@@ -25,7 +25,7 @@ void loadSections(char filename[WORD_LENGTH_LIMIT], section **sections, int *cur
             if (!validateSection(*sections, temp_sect_name, *current_elements)) {
                 reallocateSection(sections, current_elements);
 //check if current elements has correct value everywhere (either start @ 0 or 1)
-                strcpy((*section + *current_elements)->name, temp_sect_name);
+                strcpy((*sections + *current_elements)->name, temp_sect_name);
             }
 
             clearCharArray(temp_sect_name, i + 1);
@@ -50,26 +50,26 @@ void loadBooks(char filename[WORD_LENGTH_LIMIT], book **books, int *current_elem
     const char s[2] = ";";
     char temp[WORD_LENGTH_LIMIT];
     file = fopen(filename, "r");
-    
-    clearCharArray(readline, WORD_LENGTH_LIMIT);
+
+    clearCharArray(readLine, WORD_LENGTH_LIMIT);
     clearCharArray(temp, WORD_LENGTH_LIMIT);
-    
+
     if (!file) {
         printf("Error: File %s not found or cannot be opened\n", filename);
         return;
     }
- 
+
 //moze nie dzialac ze wzgledu na wpakowywanie \n przez fgets
 //mozna rozwiazac to jak w fileMngr()
-    while (fgets(line, sizeof line, file) != NULL) {
-        printf("%s\n", line);
+    while (fgets(readLine, sizeof readLine, file) != NULL) {
+        printf("%s\n", readLine);
         int inc = 0;
         book *temp_book = (book *) malloc(sizeof(book));
 
-        token = strtok(line, s);
+        token = strtok(readLine, s);
 
         while (token != NULL) {
-            switch (i) {
+            switch (inc) {
                 case 0:
                     strcpy(temp_book->signature, token);
                     break;
@@ -90,12 +90,12 @@ void loadBooks(char filename[WORD_LENGTH_LIMIT], book **books, int *current_elem
                     exit(666);
             }//switch
 
-            i++;
+            inc++;
             printf("token: %s\n", token);
-            temp = strtok(NULL, s);
-            token = strndup(temp, strcspn(temp, "\n"));
+            strcpy(temp, strtok(NULL, s));
+            strcpy(token, strndup(temp, strcspn(temp, "\n")));
             clearCharArray(temp, WORD_LENGTH_LIMIT);
-            //clearCharArray(token, WORD_LENGTH_LIMIT); strlen token?
+            clearCharArray(token, WORD_LENGTH_LIMIT);
         }
         printf("tokenend: %s\n", token);
         insertBook(books, current_elements, temp_book);
@@ -109,7 +109,7 @@ void loadBooks(char filename[WORD_LENGTH_LIMIT], book **books, int *current_elem
 }
 
 //wip
-void loadDatabase(char filename[WORD_LENGTH_LIMIT], book **books, int *current_book_elements, section **sections,
+void loadDatabase(char filename[WORD_LENGTH_LIMIT], book **books, section **sections, int *current_book_elements,
                   int *current_section_elements) {
     FILE *file;
     char readLine[1000];
@@ -123,16 +123,16 @@ void loadDatabase(char filename[WORD_LENGTH_LIMIT], book **books, int *current_b
     }
 
 //jak dziala funkcja wyzej to zastosuje to samo rozwiazanie.
-    while (fgets(line, sizeof line, file) != NULL) {
-        printf("%s\n", line);
+    while (fgets(readLine, sizeof readLine, file) != NULL) {
+        printf("%s\n", readLine);
         int inc = 0;
         book *temp_book = (book *) malloc(sizeof(book));
 //test if strtok works
-        token = strtok(line, s);
+        token = strtok(readLine, s);
 //wywolaj funkcje dla niego
 //counter/incrementator i odpowiednie przypisania.
         while (token != NULL) {
-            switch (i) {
+            switch (inc) {
                 case 0:
                     strcpy(temp_book->signature, token);
                     break;
@@ -163,12 +163,12 @@ void loadDatabase(char filename[WORD_LENGTH_LIMIT], book **books, int *current_b
                     exit(666);
             }//switch
 
-            i++;
+            inc++;
             printf("token: %s\n", token);
             token = strtok(NULL, s);
         }
         printf("tokenend: %s\n", token);
-        insertBook(books, current_elements, temp_book);
+        insertBook(books, current_book_elements, temp_book);
     }
 
     if (fclose(file) == EOF) {
@@ -185,7 +185,7 @@ void insertBook(book **books, int *current_elements, book *loadedBook) {
     }
 
     reallocateBooks(books, current_elements);
-    (*books + i) = loadedBook;
+    (*books + *current_elements) = loadedBook;
 }
 
 //test

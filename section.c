@@ -3,7 +3,7 @@
 void displaySections(section *sections, int current_elements) {
     int i = 0;
     while (i < current_elements) {
-        printf("%s\n", *(sections + i));
+        printf("%s\n", (sections + i)->name);
     }//while
 }
 
