@@ -11,13 +11,14 @@ void renameSection(section *, int current_elements, char name[WORD_LENGTH_LIMIT]
 
 void displaySections(section *, int current_elements);
 
-void createSection(section **, int *current_elements); //test if working correctly after inc
-void removeSection(section **, int *current_elements, char name[WORD_LENGTH_LIMIT]); //test if working correct after dec
+void createSection(section **, int *current_elements);
+
+void removeSection(section **, int *current_elements, char name[WORD_LENGTH_LIMIT]);
+
 int validateSection(section *, char name[WORD_LENGTH_LIMIT], int current_elements);
 
 int reallocateSection(section **, int *current_elements);
 
-//test if working correctly after inc
 int findSection(section *, int current_elements, char name[WORD_LENGTH_LIMIT]);
 
 #endif

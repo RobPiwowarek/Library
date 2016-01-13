@@ -8,11 +8,13 @@
 void menu(book **, int *, section **, int *);
 
 void fileMngr(book **, int *, section **, int *); //file manager options
-void books(book **, int *, section **, int *);
 
-void sections(section **, int *);
+void books(book **, int *, section **, int *); //book-related options
+
+void sections(section **, int *); //section-related options
 
 void about(); //author etc.
-void bDisplayMenu(book **, int, section **, int);
+
+void bDisplayMenu(book **, int, section **, int); //book-display menu
 
 #endif

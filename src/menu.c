@@ -28,7 +28,6 @@ void menu(book **liBooks, int *current_book_elements, section **sects, int *curr
         default:
             printf("Error: menu -> something went wrong\n");
             // failed to scanf == chars left in buffer
-            //if (clr == 0) clearBuffer();
     }
 }
 
@@ -125,9 +124,7 @@ void sections(section **sects, int *current_section_elements) {
             default:
                 printf("Incorrect input\n");
                 //failed scanf == chars left in buffer
-                //if (clr == 0) clearBuffer();
         }//switch
-
     }//while
 }
 
@@ -149,7 +146,6 @@ void fileMngr(book **liBooks, int *current_book_elements, section **sects, int *
     fgets(line, WORD_LENGTH_LIMIT, stdin);
     printf("\n");
 
-//check if works
     strcpy(cmd, strtok(line, " "));
     strcpy(temp, strtok(NULL, " "));
     //remove \n added by fgets
@@ -182,7 +178,7 @@ void bDisplayMenu(book **libBooks, int current_elements, section **sects, int cu
     int choice = 0;
     int a = 0;
     printf("Display Menu\n");
-    printf("1) By title\n2) By author\n3) By year\n4) By section\n5) Back\n");
+    printf("1) By title\n2) By author\n3) By year\n4) By section\n5) All books\n6) Back\n");
     printf("Choose an option: ");
     do {
         a = scanf("%d", &choice);
@@ -209,10 +205,11 @@ void bDisplayMenu(book **libBooks, int current_elements, section **sects, int cu
             displayBySection(*libBooks, *sects, current_elements, current_section_elements);
             break;
         case 5:
+            displayAllBooks(*libBooks, current_elements);
+            break;
+        case 6:
             return;
     }
-
-
 }
 
 void about() {

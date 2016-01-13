@@ -9,9 +9,9 @@
 void loadDatabase(char filename[WORD_LENGTH_LIMIT], book **, section **, int *current_book_elements,
                   int *current_section_elements); //todo
 void loadSections(char filename[WORD_LENGTH_LIMIT], section **, int *current_elements); //todo
+
 void loadBooks(char filename[WORD_LENGTH_LIMIT], book **, int *current_elements);
 
-//todo save headers, need to think
 void saveSections(char filename[WORD_LENGTH_LIMIT], section **, int current_elements);
 
 void saveBooks(char filename[WORD_LENGTH_LIMIT], book **, int current_elements);

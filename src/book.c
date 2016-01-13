@@ -21,8 +21,15 @@ void modifyBook(book *books, int *current_elements, section **sects, int *curren
     else
         setSection((books + j), *sects, *current_section_elements);
 
-
     printf("\nBook modified\n");
+}
+
+void displayAllBooks(book *books, int current_elements) {
+    int i = 0;
+    while (i < current_elements) {
+        printBook(*(books + i));
+        i++;
+    }
 }
 
 void displayBySection(book *books, section *sections, int current_book_elements, int current_section_elements) {
@@ -280,8 +287,6 @@ void setSignature(book *b1, book *books, int current_elements) {
 int isSignatureUnique(char sig[SIG_LENGTH_LIMIT], book *books, int current_elements) {
     int i = 0;
 
-    //printf("%s\n", sig);
-
     while (i < current_elements) {
         if (!strcmp(sig, (*(books + i)).signature)) return 1;
 
@@ -308,7 +313,6 @@ int validateSignature(char sig[SIG_LENGTH_LIMIT]) {
     return 0;
 }
 
-// czy na pewno if dobrze działa?
 int validateYear(book *b1) {
     int temp_year = 0;
     printf("Enter publication year: ");

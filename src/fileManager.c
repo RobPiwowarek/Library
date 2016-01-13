@@ -22,11 +22,9 @@ void loadSections(char filename[WORD_LENGTH_LIMIT], section **sections, int *cur
         c = fgetc(file);
 
         if (c == '\n') {
-            printf("section input: %s \n", temp_sect_name);
             if (!validateSection(*sections, temp_sect_name, *current_elements)) {
                 reallocateSection(sections, current_elements);
                 strcpy((*(*sections + *current_elements - 1)).name, temp_sect_name);
-                printf("Current elements: %d", *current_elements);
             }
 
             clearCharArray(temp_sect_name, i + 1);
@@ -85,7 +83,6 @@ void loadBooks(char filename[WORD_LENGTH_LIMIT], book **books, int *current_elem
             }//switch
 
             inc++;
-            printf("token: %s\n", token);
             token = strtok(NULL, s);
         }
         insertBook(books, current_elements, temp_book);
@@ -100,7 +97,6 @@ void loadBooks(char filename[WORD_LENGTH_LIMIT], book **books, int *current_elem
 
 }
 
-//wip
 void loadDatabase(char filename[WORD_LENGTH_LIMIT], book **books, section **sections, int *current_book_elements,
                   int *current_section_elements) {
     FILE *file;
@@ -116,7 +112,6 @@ void loadDatabase(char filename[WORD_LENGTH_LIMIT], book **books, section **sect
         return;
     }
 
-//jak dziala funkcja wyzej to zastosuje to samo rozwiazanie.
     while (fgets(readLine, sizeof readLine, file) != NULL) {
         int inc = 0;
         book *temp_book = (book *) malloc(sizeof(book));
@@ -162,7 +157,6 @@ void loadDatabase(char filename[WORD_LENGTH_LIMIT], book **books, section **sect
             }//switch
 
             inc++;
-            printf("token: %s\n", token);
             token = strtok(NULL, s);
         }
         insertBook(books, current_book_elements, temp_book);
@@ -187,11 +181,10 @@ void insertBook(book **books, int *current_elements, book *loadedBook) {
     *(*books + *current_elements - 1) = *loadedBook;
 }
 
-//test
 void saveSections(char filename[WORD_LENGTH_LIMIT], section **sections, int current_elements) {
     FILE *file;
     int i = 0;
-    file = fopen(filename, "w"); //diff?
+    file = fopen(filename, "w");
     if (!file) {
         printf("Error: failed to open file %s\n", filename);
         return;
@@ -208,11 +201,10 @@ void saveSections(char filename[WORD_LENGTH_LIMIT], section **sections, int curr
     }
 }
 
-//test
 void saveBooks(char filename[WORD_LENGTH_LIMIT], book **books, int current_elements) {
     FILE *file;
     int i = 0;
-    file = fopen(filename, "w"); //different open mode?
+    file = fopen(filename, "w");
 
     if (!file) {
         printf("Error: failed to fopen file %s\n", filename);
@@ -235,7 +227,7 @@ void saveBooks(char filename[WORD_LENGTH_LIMIT], book **books, int current_eleme
 void saveDatabase(char filename[WORD_LENGTH_LIMIT], book **books, int current_elements) {
     FILE *file;
     int i = 0;
-    file = fopen(filename, "w"); //different open mode?
+    file = fopen(filename, "w");
 
     if (!file) {
         printf("Error: failed to fopen file %s\n", filename);
@@ -244,7 +236,6 @@ void saveDatabase(char filename[WORD_LENGTH_LIMIT], book **books, int current_el
 
     while (i < current_elements) {
         book *temp = (*books + i);
-//sprawdz czy NULLowe sekcje cos tu psuja
         fprintf(file, "%s;%s;%s;%s;%d;%s\n", temp->signature, temp->title, temp->author_name, temp->author_surname,
                 temp->year, temp->sect->name);
         i++;

@@ -69,7 +69,6 @@ int findSection(section *sections, int current_elements, char name[WORD_LENGTH_L
     int i = 0;
 
     while (i < current_elements) {
-        printf("porownanie: %s z %s \n", (*(sections + i)).name, name);
         if (!strcmp((*(sections + i)).name, name)) return i;
         i++;
     }
@@ -129,7 +128,6 @@ void createSection(section **sections, int *current_elements) {
     printf("Enter section name: ");
     fgets(temp_name, WORD_LENGTH_LIMIT, stdin);
     temp_name[strcspn(temp_name, "\n")] = '\0';
-    printf("create: %s\n", temp_name);
 
     while (validateSection(*sections, temp_name, *current_elements)) {
         printf("\nSection already exists, please enter a different name:");
